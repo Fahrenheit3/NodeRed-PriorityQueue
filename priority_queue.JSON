@@ -1,0 +1,128 @@
+[
+    {
+        "id": "d0ac6a57ffe6a2b7",
+        "type": "subflow",
+        "name": "Subflow 6",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "e364c55addb2de29"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 900,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "a4f51e3aeb73761f",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Priority One",
+                "type": "num",
+                "value": "1"
+            },
+            {
+                "name": "Priority Two",
+                "type": "num",
+                "value": "2"
+            },
+            {
+                "name": "Priority Three",
+                "type": "num",
+                "value": "3"
+            }
+        ],
+        "meta": {},
+        "color": "#C0DEED"
+    },
+    {
+        "id": "a4f51e3aeb73761f",
+        "type": "function",
+        "z": "d0ac6a57ffe6a2b7",
+        "name": "",
+        "func": "\nlet prioOne = flow.get(\"priorityOne\");\nlet prioTwo = flow.get(\"priorityTwo\");\nlet prioThree = flow.get(\"priorityThree\");\n\nif(prioOne.length) {\n    return [prioOne];\n} else if(prioTwo.length) {\n    return [prioTwo];\n} else {\n    return [prioThree];\n}\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b0ab3322fdd074e4",
+        "type": "function",
+        "z": "d0ac6a57ffe6a2b7",
+        "name": "",
+        "func": "flow.set(\"priorityOne\", []);\nflow.set(\"priorityTwo\", []);\nflow.set(\"priorityThree\", []);\nlet msgObj = msg;\n\nlet prioOneArray = [];\nlet prioTwoArray = [];\nlet prioThreeArray = [];\n\nif(msg.priority === flow.get(\"priorityOneIdentifier\")){\n    prioOneArray.push(msgObj);\n    flow.set(\"priorityOne\", prioOneArray);\n} else if(msg.priority === flow.get(\"priorityTwoIdentifier\")) {\n    prioTwoArray.push(msgObj);\n    flow.set(\"priorityTwo\", prioTwoArray);\n} else if(msg.priority === flow.get(\"priorityThreeIdentifier\")) {\n    prioThreeArray.push(msgObj)\n    flow.set(\"priorityThree\", prioThreeArray);\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 120,
+        "wires": [
+            [
+                "a4f51e3aeb73761f"
+            ]
+        ]
+    },
+    {
+        "id": "e364c55addb2de29",
+        "type": "change",
+        "z": "d0ac6a57ffe6a2b7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "priorityOneIdentifier",
+                "pt": "flow",
+                "to": "Priority One",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "priorityTwoIdentifier",
+                "pt": "flow",
+                "to": "Priority Two",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "priorityThreeIdentifier",
+                "pt": "flow",
+                "to": "Priority Three",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 280,
+        "y": 120,
+        "wires": [
+            [
+                "b0ab3322fdd074e4"
+            ]
+        ]
+    }
+]
